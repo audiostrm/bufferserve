@@ -1,0 +1,16 @@
+# For running a local PostgreSQL instance to test your SQLX queries against
+
+version: '3'
+services:
+  db:
+    # This is the PostgreSQL image used by Railway PostgreSQL deployments
+    image: timescale/timescaledb-postgis:latest-pg13
+    restart: always
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: example
+    ports:
+      - 5432:5432
+    volumes:
+      - ./localdb:/var/lib/postgresql/data
