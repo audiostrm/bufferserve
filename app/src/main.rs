@@ -2,7 +2,7 @@ mod types;
 mod util;
 
 use actix_cors::Cors;
-use actix_web::{get, http, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use reqwest::Client;
 use sqlx::{Pool, Postgres};
 use std::env;
@@ -67,14 +67,8 @@ async fn main() -> std::io::Result<()> {
     println!("[CONNECTION] Connected Database");
 
     HttpServer::new(move || {
-        let cors = Cors::default()
-            .allowed_origin("https://audiostream.vercel.app")
-            .allowed_origin_fn(|origin, _req_head| {
-                origin.as_bytes().ends_with(b".audiostream.vercel.app")
-            })
-            .allowed_methods(vec!["GET"])
-            .allowed_header(http::header::CONTENT_TYPE)
-            .max_age(3600);
+        // ! DO NOT LEAVE THIS IN PROD
+        let cors = Cors::permissive();
 
         App::new()
             .wrap(cors)
