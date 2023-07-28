@@ -2,7 +2,7 @@ mod types;
 mod util;
 
 use actix_cors::Cors;
-use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, http, web, App, HttpResponse, HttpServer, Responder};
 use reqwest::Client;
 use sqlx::{Pool, Postgres};
 use std::env;
@@ -67,8 +67,15 @@ async fn main() -> std::io::Result<()> {
     println!("[CONNECTION] Connected Database");
 
     HttpServer::new(move || {
-        // ! DO NOT LEAVE THIS IN PROD
-        let cors = Cors::permissive();
+        let cors = Cors::default()
+            .allowed_origin("https://www.audiostream.space")
+            .allowed_origin_fn(|origin, _req_head| {
+                origin.as_bytes().ends_with(b"..audiostream.space")
+            })
+            .allowed_methods(vec!["GET", "POST"])
+            .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+            .allowed_header(http::header::CONTENT_TYPE)
+            .max_age(3600);
 
         App::new()
             .wrap(cors)
