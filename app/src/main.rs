@@ -67,13 +67,14 @@ async fn main() -> std::io::Result<()> {
     println!("[CONNECTION] Connected Database");
 
     HttpServer::new(move || {
-        let cors = Cors::default()
-            .allowed_origin("https://www.audiostream.space")
-            .allowed_origin("http://localhost:6006")
-            .allowed_methods(vec!["GET"])
-            .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
-            .allowed_header(http::header::CONTENT_TYPE)
-            .max_age(3600);
+        // let cors = Cors::default()
+        //     .allowed_origin("https://www.audiostream.space")
+        //     .allowed_origin("http://localhost:6006")
+        //     .allowed_methods(vec!["GET"])
+        //     .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+        //     .allowed_header(http::header::CONTENT_TYPE)
+        //     .max_age(3600);
+        let cors = Cors::permissive();
 
         App::new()
             .wrap(cors)
